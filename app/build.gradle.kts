@@ -73,14 +73,22 @@ dependencies {
    val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
-
     implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    
     val nav_version = "2.7.7"
 
     implementation ("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     kapt("androidx.room:room-compiler:$roomVersion")
+
+    //Compose
+    implementation("androidx.compose.ui:ui:1.6.7")
+    implementation ("androidx.navigation:navigation-compose:2.5.3")
+
+
 
 
 }
