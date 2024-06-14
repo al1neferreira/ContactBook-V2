@@ -1,5 +1,8 @@
 package br.com.aline.newcontactbook.views
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,10 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,11 +33,24 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import br.com.aline.newcontactbook.components.CustomButton
 import br.com.aline.newcontactbook.components.CustomTextField
+import br.com.aline.newcontactbook.dao.ContactsDao
+import br.com.aline.newcontactbook.db.local.AppDatabase
+import br.com.aline.newcontactbook.model.Contacts
 import br.com.aline.newcontactbook.ui.theme.Blue500
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
+private lateinit var contactsDao: ContactsDao
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateContact(navController: NavController) {
+
+    val contactList: MutableList<Contacts> = mutableListOf()
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
@@ -41,7 +59,7 @@ fun CreateContact(navController: NavController) {
     var cpf by remember { mutableStateOf("") }
     var uf by remember { mutableStateOf("") }
     var birhDate by remember { mutableStateOf("") }
-    var createdAt by remember { mutableStateOf("") }
+    var createdAt by remember { mutableStateOf(LocalDateTime.now())}
 
 
     Scaffold(topBar = {
@@ -159,14 +177,42 @@ fun CreateContact(navController: NavController) {
 
             CustomButton(
                 onClick = {
-                     if (name.isEmpty()
-                        || surname.isEmpty()
-                        ||phone1.isEmpty()
-                        ||uf.isEmpty()
-                        ||birhDate.isEmpty() ) {
-                        println("Preencha todos os campos")
-                    } else{
-                        println("Contato adicionado")
+                    var message = false
+
+                    scope.launch(Dispatchers.IO) {
+
+                        if (name.isEmpty()
+                            || phone1.isEmpty()
+                            || uf.isEmpty()
+                            || birhDate.isEmpty()
+                        ) {
+                            message = false
+
+                        } else {
+                            message = true
+                            val contact = Contacts(
+                                name,
+                                surname,
+                                phone1,
+                                phone2,
+                                cpf,
+                                uf,
+                                birhDate,
+                                createdAt.toString()
+                            )
+                            contactList.add(contact)
+                            contactsDao = AppDatabase.getInstance(context).contacstDao()
+                            contactsDao.insertContact(contactList)
+                        }
+                    }
+                    scope.launch(Dispatchers.Main){
+                        if(message){
+                            Toast.makeText(context, "Contato adicionado com sucesso", Toast.LENGTH_LONG).show()
+                            navController.popBackStack()
+                        }else{
+                            Toast.makeText(context, "O nome, telefone 1, UF e data de nascimento são de preenchimento obrigatório", Toast.LENGTH_LONG).show()
+                        }
+
                     }
 
                 },

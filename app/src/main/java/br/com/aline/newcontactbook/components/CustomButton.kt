@@ -17,9 +17,7 @@ import br.com.aline.newcontactbook.ui.theme.ShapeEditText
 @Composable
 fun CustomButton(onClick: () -> Unit, text: String) {
     Button(
-        onClick = {
-
-        },
+        onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Blue500),
         shape = ShapeEditText.medium,
         modifier = Modifier
