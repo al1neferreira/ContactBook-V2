@@ -77,7 +77,7 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
 
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    
+
     val nav_version = "2.7.7"
 
     implementation ("androidx.navigation:navigation-compose:$nav_version")
@@ -87,6 +87,12 @@ dependencies {
     //Compose
     implementation("androidx.compose.ui:ui:1.6.7")
     implementation ("androidx.navigation:navigation-compose:2.5.3")
+
+    //Compose Material 3
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta02")
+
 
 
 
