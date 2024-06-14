@@ -13,3 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 val NewPink = Color(0xFFCD00EA)
 val NewPurple = Color(0xFF5C00D2)
 
+val WaterGreen = Color(0xFF009689)
+val WaterBlue = Color(0xFF00BCD3)
+val Blue500 = Color(0xFF006AF6)
+val OceanBlue = Color(0xFF3F51B2)
